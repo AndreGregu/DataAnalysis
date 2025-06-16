@@ -3,6 +3,7 @@ import subprocess
 from transformers import AutoTokenizer
 import zstandard as zstd
 import argparse
+import io
 
 def decompress_and_count(compressed_path, tokenizer, buffer_size=50000):
     bytes = os.path.getsize(compressed_path)
@@ -16,7 +17,7 @@ def decompress_and_count(compressed_path, tokenizer, buffer_size=50000):
     with open(compressed_path, 'rb') as compressed:
         with dctx.stream_reader(compressed) as reader:
             # Wrap the byte stream in a text reader
-            text_stream = open(reader.fileno(), mode='r', encoding='utf-8', errors='replace', closefd=False)
+            text_stream = io.TextIOWrapper(reader, encoding='utf-8', errors='replace')
 
             for i, line in enumerate(text_stream, 1):
                 buffer.append(line)
@@ -50,7 +51,7 @@ def main():
         
     compressed_file = args.compressed 
 
-    model_name = "google/gemma-3-4b-it" 
+    model_name = args.model 
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
 
     byte_count, line_count, segment_count, character_count, token_count = decompress_and_count(compressed_file, tokenizer)
