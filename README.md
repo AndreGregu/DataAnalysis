@@ -47,3 +47,25 @@ Function calls: 41,491,245 function calls (41,399,226  primitive)
 | 8  | `io.open_code`           | 2,470     | 2.482          | 0.001        | 2.482               | `{built-in method io.open_code}`                    |
 | 9  | `<listcomp>`             | 69        | 1.970          | 0.029        | 248.622             | `tokenization_utils_fast.py:538`                    |
 | 10 | `from_file`              | 1         | 1.315          | 1.315        | 1.315               | `{built-in method from_file}`                       |
+
+
+---
+
+Profiling results from third round:  
+
+Profile file: prof.prof  
+Execution time: 691.608 seconds  
+Function calls: 41,495,110 total (41,403,091 primitive)  
+
+| #  | Function                 | Calls     | Total Time (s) | Per Call (s) | Cumulative Time (s) | File\:Line                                          |
+| -- | ------------------------ | --------- | -------------- | ------------ | ------------------- | --------------------------------------------------- |
+| 1  | `encode_batch`           | 172       | **234.186**    | 1.362        | 234.186             | `{method 'encode_batch' of 'tokenizers.Tokenizer'}` |
+| 2  | `_convert_encoding`      | 3,434,691 | **222.421**    | \~0.000      | 222.817             | `tokenization_utils_fast.py:282`                    |
+| 3  | `decompress_and_count`   | 1         | **187.149**    | 187.149      | 673.007             | `script.py:9`                                       |
+| 4  | `utf_8_decode`           | 1,811,859 | 11.019         | \~0.000      | 11.019              | `{built-in method _codecs.utf_8_decode}`            |
+| 5  | `read` (buffered reader) | 2,480     | 7.872          | 0.003        | 7.872               | `{method 'read' of '_io.BufferedReader'}`           |
+| 6  | `str.count`              | 3,434,710 | 7.257          | \~0.000      | 7.257               | `{method 'count' of 'str'}`                         |
+| 7  | `posix.stat`             | 24,744    | 2.535          | \~0.000      | 2.535               | `{built-in method posix.stat}`                      |
+| 8  | `<listcomp>`             | 172       | 1.927          | 0.011        | 224.744             | `tokenization_utils_fast.py:538`                    |
+| 9  | `io.open_code`           | 2,470     | 1.565          | 0.001        | 1.565               | `{built-in method io.open_code}`                    |
+| 10 | `from_file`              | 1         | 1.305          | 1.305        | 1.305               | `{built-in method from_file}`                       |

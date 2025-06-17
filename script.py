@@ -3,9 +3,10 @@ import argparse
 import io
 from transformers import AutoTokenizer
 import zstandard as zstd
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # function that does the work
-def decompress_and_count(compressed_path, tokenizer, buffer_size=50000):
+def decompress_and_count(compressed_path, tokenizer, buffer_size=20000):
     file_size = os.path.getsize(compressed_path) # path to compressed file
     total_lines = total_segments = total_characters = total_tokens = 0
     buffer = [] # buffer array
@@ -29,7 +30,7 @@ def decompress_and_count(compressed_path, tokenizer, buffer_size=50000):
                     buffer.clear()
 
                     # print progress
-                    if i % 10000 == 0:
+                    if i % 20000 == 0:
                         print(f"[INFO] Processed {i:,} lines...")
             # handle rest-buffer
             if buffer:
@@ -49,6 +50,8 @@ def tokenize_batch(lines, tokenizer):
     )
     return sum(len(ids) for ids in encoded['input_ids'])
 
+
+
 def main():
     parser = argparse.ArgumentParser(description="Efficiently process and tokenize a compressed .zst file.")
     parser.add_argument("--compressed", default="nob_data.zst", help="Path to .zst file")
@@ -61,8 +64,8 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(
         args.model,
         trust_remote_code=True,
-        #cache dir for fox server
-        #cache_dir="/fp/projects01/ec403/hf_models",
+        # Cache dir on fox
+        # cache_dir="/fp/projects01/ec403/hf_models",
         use_fast=True
     )
 
