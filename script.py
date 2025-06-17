@@ -1,67 +1,81 @@
 import os
-import subprocess
-from transformers import AutoTokenizer
-import zstandard as zstd
 import argparse
 import io
+from transformers import AutoTokenizer
+import zstandard as zstd
 
+# function that does the work
 def decompress_and_count(compressed_path, tokenizer, buffer_size=50000):
-    bytes = os.path.getsize(compressed_path)
-    total_lines = 0
-    total_segments = 0
-    total_characters = 0
-    total_tokens = 0
-    buffer = []
+    file_size = os.path.getsize(compressed_path) # path to compressed file
+    total_lines = total_segments = total_characters = total_tokens = 0
+    buffer = [] # buffer array
 
+    # decompress file
     dctx = zstd.ZstdDecompressor()
-    with open(compressed_path, 'rb') as compressed:
-        with dctx.stream_reader(compressed) as reader:
-            # Wrap the byte stream in a text reader
+    with open(compressed_path, 'rb') as compressed_file:
+        with dctx.stream_reader(compressed_file) as reader: # stream reader to not have to store the file
             text_stream = io.TextIOWrapper(reader, encoding='utf-8', errors='replace')
 
+            #iterate through stream
             for i, line in enumerate(text_stream, 1):
-                buffer.append(line)
-                total_lines += 1
-                total_segments += line.count('\n')
-                total_characters += len(line)
+                buffer.append(line) # add line to buffer
+                total_lines += 1 # count lines
+                total_segments += line.count('\n') # count segments
+                total_characters += len(line) # counts chars
 
+                # clean buffer when full
                 if len(buffer) >= buffer_size:
-                    encoded = tokenizer(buffer, add_special_tokens=False)
-                    total_tokens += sum(len(ids) for ids in encoded['input_ids'])
-                    buffer = []
+                    total_tokens += tokenize_batch(buffer, tokenizer)
+                    buffer.clear()
 
+                    # print progress
                     if i % 10000 == 0:
-                        print(f"Processed {i} lines...")
-
-            # Remaining lines
+                        print(f"[INFO] Processed {i:,} lines...")
+            # handle rest-buffer
             if buffer:
-                encoded = tokenizer(buffer, add_special_tokens=False)
-                total_tokens += sum(len(ids) for ids in encoded['input_ids'])
+                total_tokens += tokenize_batch(buffer, tokenizer)
 
-    return bytes, total_lines, total_segments, total_characters, total_tokens
+    return file_size, total_lines, total_segments, total_characters, total_tokens
 
+# efficiently tokenize buffer
+def tokenize_batch(lines, tokenizer):
+    encoded = tokenizer(
+        lines,
+        add_special_tokens=False,
+        return_attention_mask=False,
+        return_token_type_ids=False,
+        padding=False,
+        truncation=False
+    )
+    return sum(len(ids) for ids in encoded['input_ids'])
 
 def main():
+    parser = argparse.ArgumentParser(description="Efficiently process and tokenize a compressed .zst file.")
+    parser.add_argument("--compressed", default="nob_data.zst", help="Path to .zst file")
+    parser.add_argument("--model", default="google/gemma-3-4b-it", help="Hugging Face tokenizer model")
 
-    parser = argparse.ArgumentParser(description="Process and tokenize a decompressed .zst file.")
-    parser.add_argument("--compressed", default="nob_data.zst", help="Path to the .zst file")
-    parser.add_argument("--model", default="google/gemma-3-4b-it", help="Hugging Face model name")
-
+    # handle args
     args = parser.parse_args()
-        
-    compressed_file = args.compressed 
 
-    model_name = args.model 
-    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+    # define tokenizer
+    tokenizer = AutoTokenizer.from_pretrained(
+        args.model,
+        trust_remote_code=True,
+        #cache dir for fox server
+        #cache_dir="/fp/projects01/ec403/hf_models",
+        use_fast=True
+    )
 
-    byte_count, line_count, segment_count, character_count, token_count = decompress_and_count(compressed_file, tokenizer)
+    # gather results
+    results = decompress_and_count(args.compressed, tokenizer)
 
-
-    print(f"Compressed file size: {byte_count} bytes")
-    print(f"Number of lines in decompressed file: {line_count}")
-    print(f"Number of segments in decompressed file: {segment_count}")
-    print(f"Number of characters in decompressed file: {character_count}")
-    print(f"Number of tokens in decompressed file: {token_count} ")
+    # print results
+    print("\n=== File Summary ===")
+    print(f"Compressed file size:       {results[0]:,} bytes")
+    print(f"Number of lines:            {results[1]:,}")
+    print(f"Number of segments:         {results[2]:,}")
+    print(f"Number of characters:       {results[3]:,}")
+    print(f"Number of tokens:           {results[4]:,}")
 
 if __name__ == "__main__":
     main()
