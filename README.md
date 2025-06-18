@@ -1,71 +1,87 @@
-=== File Summary ===  
-Compressed file size:       4,419,747,840 bytes  
-Number of lines:            3,434,691  
-Number of segments:         3,434,690  
-Number of characters:       14,569,246,888  
-Number of tokens:           5,045,820,511  
+# Compressed Text Processing with Token Counting
 
----  
-
-Profiling results from first round: 
-
-Profile file: prof.prof  
-Execution time: 923.878 seconds  
-Function calls: 44,925,212 total (44,833,626 primitive)  
-
-| #  | Function               | Calls     | Total Time (s) | Per Call (s) | Cumulative Time (s) | File\:Line                                          |
-| -- | ---------------------- | --------- | -------------- | ------------ | ------------------- | --------------------------------------------------- |
-| 1  | `_convert_encoding`    | 3,434,691 | **430.936**    | \~0.000      | 431.542             | `tokenization_utils_fast.py:282`                    |
-| 2  | `encode_batch`         | 69        | **243.652**    | 3.531        | 243.652             | `{method 'encode_batch' of 'tokenizers.Tokenizer'}` |
-| 3  | `decompress_and_count` | 1         | **200.232**    | 200.232      | 908.350             | `script.py:8`                                       |
-| 4  | `utf_8_decode`         | 1,811,859 | 11.096         | \~0.000      | 11.096              | `{built-in method _codecs.utf_8_decode}`            |
-| 5  | `str.count`            | 3,434,710 | 7.300          | \~0.000      | 7.300               | `{method 'count' of 'str'}`                         |
-| 6  | `main`                 | 1         | 4.158          | 4.158        | 914.302             | `script.py:44`                                      |
-| 7  | `<listcomp>`           | 138       | 3.743          | 0.027        | 3.743               | `tokenization_utils_fast.py:560`                    |
-| 8  | `posix.stat`           | 24,737    | 2.778          | \~0.000      | 2.778               | `{built-in method posix.stat}`                      |
-| 9  | `batch_encode_plus`    | 69        | 1.935          | 0.028        | 686.054             | `tokenization_utils_base.py:3094`                   |
-| 10 | `io.open_code`         | 2,470     | 1.814          | 0.001        | 1.814               | `{built-in method io.open_code}`                    |
-
-
----  
-
-Profiling results from second round: 
-
-Profile file: prof.prof  
-Execution time: 714.876 seconds    
-Function calls: 41,491,245 function calls (41,399,226  primitive)  
-
-| #  | Function                 | Calls     | Total Time (s) | Per Call (s) | Cumulative Time (s) | File\:Line                                          |
-| -- | ------------------------ | --------- | -------------- | ------------ | ------------------- | --------------------------------------------------- |
-| 1  | `_convert_encoding`      | 3,434,691 | **246.257**    | \~0.000      | 246.652             | `tokenization_utils_fast.py:282`                    |
-| 2  | `encode_batch`           | 69        | **223.164**    | 3.234        | 223.164             | `{method 'encode_batch' of 'tokenizers.Tokenizer'}` |
-| 3  | `decompress_and_count`   | 1         | **188.226**    | 188.226      | 687.525             | `script.py:8`                                       |
-| 4  | `read` (buffered reader) | 2,480     | 14.693         | 0.006        | 14.693              | `{method 'read' of '_io.BufferedReader'}`           |
-| 5  | `utf_8_decode`           | 1,811,859 | 11.123         | \~0.000      | 11.123              | `{built-in method _codecs.utf_8_decode}`            |
-| 6  | `str.count`              | 3,434,710 | 7.303          | \~0.000      | 7.303               | `{method 'count' of 'str'}`                         |
-| 7  | `posix.stat`             | 24,744    | 2.876          | \~0.000      | 2.876               | `{built-in method posix.stat}`                      |
-| 8  | `io.open_code`           | 2,470     | 2.482          | 0.001        | 2.482               | `{built-in method io.open_code}`                    |
-| 9  | `<listcomp>`             | 69        | 1.970          | 0.029        | 248.622             | `tokenization_utils_fast.py:538`                    |
-| 10 | `from_file`              | 1         | 1.315          | 1.315        | 1.315               | `{built-in method from_file}`                       |
-
+This project includes two Python scripts for processing `.zst`-compressed text files:  
+- `script.py`: Processes a single `.zst` file by decompressing, tokenizing, and collecting text statistics.  
+- `execute.py`: Uses GNU Parallel to run `script.py` on multiple `.zst` files concurrently.  
 
 ---
 
-Profiling results from third round:  
+## Requirements  
 
-Profile file: prof.prof  
-Execution time: 691.608 seconds  
-Function calls: 41,495,110 total (41,403,091 primitive)  
+### Python Packages  
+Install required Python libraries:  
 
-| #  | Function                 | Calls     | Total Time (s) | Per Call (s) | Cumulative Time (s) | File\:Line                                          |
-| -- | ------------------------ | --------- | -------------- | ------------ | ------------------- | --------------------------------------------------- |
-| 1  | `encode_batch`           | 172       | **234.186**    | 1.362        | 234.186             | `{method 'encode_batch' of 'tokenizers.Tokenizer'}` |
-| 2  | `_convert_encoding`      | 3,434,691 | **222.421**    | \~0.000      | 222.817             | `tokenization_utils_fast.py:282`                    |
-| 3  | `decompress_and_count`   | 1         | **187.149**    | 187.149      | 673.007             | `script.py:9`                                       |
-| 4  | `utf_8_decode`           | 1,811,859 | 11.019         | \~0.000      | 11.019              | `{built-in method _codecs.utf_8_decode}`            |
-| 5  | `read` (buffered reader) | 2,480     | 7.872          | 0.003        | 7.872               | `{method 'read' of '_io.BufferedReader'}`           |
-| 6  | `str.count`              | 3,434,710 | 7.257          | \~0.000      | 7.257               | `{method 'count' of 'str'}`                         |
-| 7  | `posix.stat`             | 24,744    | 2.535          | \~0.000      | 2.535               | `{built-in method posix.stat}`                      |
-| 8  | `<listcomp>`             | 172       | 1.927          | 0.011        | 224.744             | `tokenization_utils_fast.py:538`                    |
-| 9  | `io.open_code`           | 2,470     | 1.565          | 0.001        | 1.565               | `{built-in method io.open_code}`                    |
-| 10 | `from_file`              | 1         | 1.305          | 1.305        | 1.305               | `{built-in method from_file}`                       |
+```bash  
+pip install transformers zstandard  
+
+```
+### GNU Parallel
+```bash
+# Download GNU Parallel (example version)  
+wget https://ftp.gnu.org/gnu/parallel/parallel-20250522.tar.bz2  
+
+# Extract the archive  
+tar -xvjf parallel-20250522.tar.bz2  
+
+# On Ubuntu/Debian  
+sudo apt install parallel  
+
+# OR build from source (used here)  
+cd ../parallel-20250522/  
+./configure && make  
+```  
+
+**Make sure the path to parallel is correct in the script `execute.py`**  
+```bash  
+["../parallel-20250522/src/parallel", ...]  
+```  
+
+### Pretrained Tokenizer
+The script uses the Hugging Face tokenizer:  
+```bash  
+google/gemma-3-4b-it
+```  
+
+By default the models will be cached in:  
+```bash  
+/fp/projects01/ec403/hf_models  
+```  
+**Make sure this directory exists or pass another directory as `--cache_dir` argument when running `execute.py`**  
+
+## File Structure  
+```bash  
+project_root/  
+│  
+├── script.py          # Handles decompression and token counting for one file  
+├── execute.py         # Batch execution with GNU Parallel  
+├── data_files/        # Your input .zst files  
+├── nob_data/          # Output folder (created automatically)  
+├── README.md          # This file  
+```
+The `data_files` folder is non existent as the datasets are to large to upload to git. Download them from `https://hplt-project.org/datasets/v2.0`.  
+
+## Running The Scripts  
+Process a single file:  
+```bash  
+python script.py --compressed data_files/file1.jsonl.zst --output nob_data/file1_results/summary.json  
+```  
+
+Process multiple files in parallel:  
+```bash
+python execute.py data_files/*.jsonl.zst 
+```
+
+## Output  
+Each processed file will generate: 
+
+nob_data/<file_results>/summary.json  
+
+A `summary.json` file will contain following metrics regarding the dataset:  
+- File size  
+- Documents  
+- Segments  
+- Characters  
+- Tokens  
+- Execution time  
+
+

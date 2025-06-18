@@ -66,10 +66,11 @@ def format_seconds(seconds):
     return f"{h:02}:{m:02}:{s:02}"
 
 def main():
-    parser = argparse.ArgumentParser(description="Efficiently process and tokenize a compressed .zst file.")
+    parser = argparse.ArgumentParser(description="Efficiently process and tokenize a compressed .zst file")
     parser.add_argument("--compressed", required=True, help="Path to .zst file")
     parser.add_argument("--model", default="google/gemma-3-4b-it", help="Hugging Face tokenizer model")
     parser.add_argument("--output", required=True, help="Output JSON file with stats")
+    parser.add_argument("--cache_dir", required=True, help="Cache directory to store transformer model")
 
     # handle args
     args = parser.parse_args()
@@ -80,7 +81,7 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(
         args.model,
         trust_remote_code=True,
-        cache_dir="/fp/projects01/ec403/hf_models",
+        cache_dir=args.cache_dir,
         use_fast=True
     )
 
