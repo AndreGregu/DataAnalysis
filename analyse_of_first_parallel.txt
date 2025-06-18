@@ -1,0 +1,56 @@
+==================================================
+Job Execution Summary
+==================================================
+
+[INFO] All processes completed.
+
+Command:
+  python execute.py /cluster/work/projects/ec403/1.jsonl.zst /cluster/work/projects/ec403/2.jsonl.zst
+
+------------------------------
+Timing & CPU Usage
+------------------------------
+User time (seconds):                57,786.02
+System time (seconds):              341.34
+Elapsed (wall clock) time:          1:23:04
+Percent of CPU this job got:        1166%
+
+------------------------------
+Memory Usage
+------------------------------
+Maximum resident set size (kB):     5,599,964   (~5.34 GB)
+Average resident set size (kB):     0
+Average shared text size (kB):      0
+Average unshared data size (kB):    0
+Average stack size (kB):            0
+Average total size (kB):            0
+
+------------------------------
+Page Faults
+------------------------------
+Major page faults (I/O):            2
+Minor page faults (reclaimed):      279,314,765
+
+------------------------------
+Context Switches
+------------------------------
+Voluntary context switches:         1,060,368
+Involuntary context switches:       915,191
+
+------------------------------
+I/O & System Interactions
+------------------------------
+Swaps:                              0
+File system inputs (kB):            0
+File system outputs (kB):           117,056
+Socket messages sent:               0
+Socket messages received:           0
+Signals delivered:                  0
+Page size (bytes):                  4096
+
+------------------------------
+Exit Status
+------------------------------
+Exit code:                          0 (Success)
+
+==================================================
