@@ -6,7 +6,7 @@ import sys
 def main():
     parser = argparse.ArgumentParser(description="Use GNU Parallel to run script.py on multiple .zst files.")
     parser.add_argument("data_files", nargs="+", help="Paths to .zst data files")
-    parser.add_argument("--cache_dir", default="./scratch/project_462000953/agregussen/dataAnalysis/hf_cache", help="Cache directory to store transformer model")
+    parser.add_argument("--cache_dir", default="./scratch/project_462000953/agregussen/hf_cache", help="Cache directory to store transformer model")
     args = parser.parse_args()
 
     # Validate input files
@@ -21,7 +21,6 @@ def main():
         abs_path = os.path.abspath(path)
         file_name = os.path.basename(abs_path).replace(".jsonl.zst", "")
         parent_dir = "/scratch/project_462000953/agregussen/results"
-        #parent_dir = os.path.dirname(abs_path)
         output_dir = os.path.join(parent_dir, f"{file_name}_results")
         os.makedirs(output_dir, exist_ok=True)
         output_json_path = os.path.join(output_dir, "summary.json")
@@ -33,7 +32,7 @@ def main():
     print("[INFO] Starting parallel execution...")
     parallel_input = "\n".join(commands)
     subprocess.run(
-    ["../parallel-20250522/src/parallel", "--line-buffer", "-j", str(len(commands))],
+    ["../tools/parallel-20250522/src/parallel", "--line-buffer", "-j", str(len(commands))],
     input=parallel_input.encode(),
     check=True
 )

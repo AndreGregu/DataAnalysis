@@ -44,7 +44,7 @@ google/gemma-3-4b-it
 
 By default the models will be cached in:  
 ```bash  
-/fp/projects01/ec403/hf_models  
+/scratch/project_462000953/agregussen/hf_cache  
 ```  
 **Make sure this directory exists or pass another directory as `--cache_dir` argument when running `execute.py`**  
 

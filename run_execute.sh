@@ -16,8 +16,8 @@ if [ "$#" -lt 1 ]; then
     exit 1
 fi
 
-# Optional: Activate Python virtual environment (uncomment if needed)
-# source /path/to/venv/bin/activate
+# Activate Python virtual environment
+# source /scratch/project_462000953/agregussen/myenv/bin/activate
 
 # Run execute.py with provided .zst files
 /usr/bin/time -v python execute.py "$@"
