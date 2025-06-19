@@ -1,3 +1,10 @@
+activate venv
+source myenv/bin/activate
+
+path til data på lumi: /scratch/project_462000953/training/catalogue/hplt/2.0/cleaned
+
+path til min mappe: /scratch/project_462000953/agregussen
+
 REMEMBER TO EDIT:
 #SBATCH --cpus-per-task= 
 #SBATCH --mem= 

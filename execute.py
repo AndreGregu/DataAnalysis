@@ -6,7 +6,7 @@ import sys
 def main():
     parser = argparse.ArgumentParser(description="Use GNU Parallel to run script.py on multiple .zst files.")
     parser.add_argument("data_files", nargs="+", help="Paths to .zst data files")
-    parser.add_argument("--cache_dir", default="/fp/projects01/ec403/hf_models", help="Cache directory to store transformer model")
+    parser.add_argument("--cache_dir", default="./scratch/project_462000953/agregussen/dataAnalysis/hf_cache", help="Cache directory to store transformer model")
     args = parser.parse_args()
 
     # Validate input files
@@ -19,8 +19,8 @@ def main():
     commands = []
     for path in args.data_files:
         abs_path = os.path.abspath(path)
-        file_name = os.path.splitext(os.path.basename(abs_path))[0]
-        parent_dir = "./nob_data"
+        file_name = os.path.basename(abs_path).replace(".jsonl.zst", "")
+        parent_dir = "/scratch/project_462000953/agregussen/results"
         #parent_dir = os.path.dirname(abs_path)
         output_dir = os.path.join(parent_dir, f"{file_name}_results")
         os.makedirs(output_dir, exist_ok=True)
