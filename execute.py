@@ -26,14 +26,14 @@ def main():
         os.makedirs(output_dir, exist_ok=True)
         output_json_path = os.path.join(output_dir, "summary.json")
 
-        cmd = f"python script.py --compressed '{abs_path}' --output '{output_json_path}' --cache_dir '{args.cache_dir}"
+        cmd = f"python script.py --compressed '{abs_path}' --output '{output_json_path}' --cache_dir '{args.cache_dir}'"
         commands.append(cmd)
 
     # Run commands using GNU Parallel
     print("[INFO] Starting parallel execution...")
     parallel_input = "\n".join(commands)
     subprocess.run(
-    ["../parallel-20250522/src/parallel", "--eta", "--progress", "--color", "--line-buffer", "-j", str(len(commands))],
+    ["../parallel-20250522/src/parallel", "--line-buffer", "-j", str(len(commands))],
     input=parallel_input.encode(),
     check=True
 )

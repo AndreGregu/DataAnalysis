@@ -1,0 +1,31 @@
+REMEMBER TO EDIT:
+#SBATCH --cpus-per-task= 
+#SBATCH --mem= 
+ACCORDING TO THE NUMBER OF FILES!
+
+To run the program: 
+
+Enter directory ./Internship
+
+run: 
+sbatch run_execute.sh /cluster/work/projects/ec403/1.jsonl.zst /cluster/work/projects/ec403/2.jsonl.zst
+or 
+/usr/bin/time -v python execute.py /cluster/work/projects/ec403/1.jsonl.zst /cluster/work/projects/ec403/2.jsonl.zst
+
+where: 
+/cluster/work/projects/ec403/1.jsonl.zst /cluster/work/projects/ec403/2.jsonl.zst'
+represents the file locations (in this case two files in this folder: /cluster/work/projects/ec403/
+
+you will get a job id in a simmilar message: 
+Submitted batch job <job_id>
+
+run:
+scontrol show job <job_id>
+to show the status of the job
+
+to analyse the process run: 
+htop
+
+to recieve updates live: 
+tail -f slurm-<job_id>.out 
+

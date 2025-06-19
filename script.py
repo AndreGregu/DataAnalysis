@@ -66,7 +66,7 @@ def format_seconds(seconds):
     return f"{h:02}:{m:02}:{s:02}"
 
 def main():
-    parser = argparse.ArgumentParser(description="Efficiently process and tokenize a compressed .zst file")
+    parser = argparse.ArgumentParser(description="Efficiently process and tokenize a compressed .zst file.")
     parser.add_argument("--compressed", required=True, help="Path to .zst file")
     parser.add_argument("--model", default="google/gemma-3-4b-it", help="Hugging Face tokenizer model")
     parser.add_argument("--output", required=True, help="Output JSON file with stats")

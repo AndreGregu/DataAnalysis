@@ -5,7 +5,8 @@ Job Execution Summary
 [INFO] All processes completed.
 
 Command:
-  python execute.py /cluster/work/projects/ec403/1.jsonl.zst /cluster/work/projects/ec403/2.jsonl.zst
+
+python execute.py /cluster/work/projects/ec403/1.jsonl.zst /cluster/work/projects/ec403/2.jsonl.zst
 
 ------------------------------
 Timing & CPU Usage
