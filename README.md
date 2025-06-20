@@ -1,7 +1,3 @@
----
-
-
-
 ````markdown
 
 # Compressed Text Processing with Token Counting
