@@ -228,7 +228,7 @@ All processing (single or multiple files) is done using:
 
 run_execute.sh
 
-````
+```
 
 
 
@@ -309,4 +309,4 @@ Each `summary.json` includes:
 * Execution time
 
 
-
+````
