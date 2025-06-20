@@ -1,4 +1,4 @@
-````markdown
+
 
 # Compressed Text Processing with Token Counting
 
@@ -124,7 +124,7 @@ This project uses the Hugging Face model:
 
 
 
-```
+```bash
 
 google/gemma-3-4b-it
 
@@ -182,7 +182,7 @@ You can change this using the `--cache_dir` argument when running `execute.py`.
 
 
 
-```
+```bash
 
 project_root/
 
@@ -284,7 +284,7 @@ Each file generates:
 
 
 
-```
+```bash
 
 /<parent_folder>/<filename>_results/summary.json
 
@@ -307,6 +307,3 @@ Each `summary.json` includes:
 * Total tokens
 
 * Execution time
-
-
-````
