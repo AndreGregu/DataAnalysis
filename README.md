@@ -100,15 +100,15 @@ sudo apt install parallel
 
 
 
-> **Note:** Ensure the path to GNU Parallel is correct in `execute.py`:
+>**Note:** Ensure the path to GNU Parallel is correct in `execute.py`:
 
->
 
-> ```bash
 
-> ["../parallel-20250522/src/parallel", ...]
+```bash
 
-> ```
+["../parallel-20250522/src/parallel", ...]
+
+```
 
 
 
