@@ -12,7 +12,7 @@ This project includes two Python scripts for processing `.zst`-compressed text f
 Install required Python libraries:  
 
 ```bash  
-pip install transformers zstandard  
+pip install transformers zstandard torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu  
 
 ```
 ### GNU Parallel
