@@ -17,10 +17,10 @@ def main():
 
     # Prepare commands for GNU Parallel
     commands = []
+    parent_dir = "/scratch/project_462000953/agregussen/results"
     for path in args.data_files:
         abs_path = os.path.abspath(path)
         file_name = os.path.basename(abs_path).replace(".jsonl.zst", "")
-        parent_dir = "/scratch/project_462000953/agregussen/results"
         output_dir = os.path.join(parent_dir, f"{file_name}_results")
         os.makedirs(output_dir, exist_ok=True)
         output_json_path = os.path.join(output_dir, "summary.json")
