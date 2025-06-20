@@ -4,8 +4,8 @@
 #SBATCH --output=slurm-%j.out
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=4800M                   # Placeholder, overridden at submission
+#SBATCH --cpus-per-task=50
+#SBATCH --mem=250G                   # Placeholder, overridden at submission
 #SBATCH --partition=small
 
 # Check if at least one .zst file is provided

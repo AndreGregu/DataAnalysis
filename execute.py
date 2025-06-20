@@ -36,7 +36,9 @@ def main():
 
     commands = []
 
-    parent_dir = "/scratch/project_462000953/agregussen/results"
+    result_root = "/scratch/project_462000953/agregussen/results"
+
+
 
     for path in args.data_files:
 
@@ -44,13 +46,13 @@ def main():
 
         file_name = os.path.basename(abs_path).replace(".jsonl.zst", "")
 
-        output_dir = os.path.join(parent_dir, f"{file_name}_results")
+        parent_folder_name = os.path.basename(os.path.dirname(abs_path))
+
+        output_dir = os.path.join(result_root, parent_folder_name, f"{file_name}_results")
 
         os.makedirs(output_dir, exist_ok=True)
 
         output_json_path = os.path.join(output_dir, "summary.json")
-
-
 
         cmd = f"python script.py --compressed '{abs_path}' --output '{output_json_path}' --cache_dir '{args.cache_dir}'"
 
@@ -66,13 +68,13 @@ def main():
 
     subprocess.run(
 
-    ["../tools/parallel-20250522/src/parallel", "--line-buffer", "-j", str(len(commands))],
+        ["../tools/parallel-20250522/src/parallel", "--line-buffer", "-j", str(len(commands))],
 
-    input=parallel_input.encode(),
+        input=parallel_input.encode(),
 
-    check=True
+        check=True
 
-)
+    )
 
     print("[INFO] All processes completed.")
 
@@ -81,3 +83,4 @@ def main():
 if __name__ == "__main__":
 
     main()
+
