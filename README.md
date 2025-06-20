@@ -36,7 +36,7 @@ This project provides tools for processing `.zst`-compressed text files using Hu
 
 module load cray-python
 
-````
+```
 
 
 
@@ -104,7 +104,7 @@ sudo apt install parallel
 
 >
 
-> ```python
+> ```bash
 
 > ["../parallel-20250522/src/parallel", ...]
 
