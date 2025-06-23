@@ -20,6 +20,10 @@ def decompress_and_count(compressed_path, tokenizer, char_buffer_size=80_000_000
 
     file_size = os.path.getsize(compressed_path)
 
+    malformed_count = 0
+
+    malformed_lines = []
+
     total_docs = total_segments = total_characters = total_tokens = 0
 
     buffer = []
@@ -50,7 +54,11 @@ def decompress_and_count(compressed_path, tokenizer, char_buffer_size=80_000_000
 
                 except json.JSONDecodeError:
 
-                    continue  # Skip malformed lines
+                    malformed_count += 1
+
+                    malformed_lines.append(i)
+
+                    continue
 
 
 
@@ -90,7 +98,7 @@ def decompress_and_count(compressed_path, tokenizer, char_buffer_size=80_000_000
 
 
 
-    return file_size, total_docs, total_segments, total_characters, total_tokens
+    return file_size, total_docs, total_segments, total_characters, total_tokens,  malformed_count, malformed_lines
 
 
 
@@ -174,7 +182,7 @@ def main():
 
     # gather results
 
-    file_size, docs, segments, characters, tokens = decompress_and_count(args.compressed, tokenizer)
+    file_size, docs, segments, characters, tokens, malformed_count, malformed_lines  = decompress_and_count(args.compressed, tokenizer)
 
 
 
@@ -196,7 +204,11 @@ def main():
 
         "tokens": tokens,
 
-        "execution_time": formatted_time
+        "execution_time": formatted_time,
+
+	"error_count": malformed_count,
+
+	"error_indexes": malformed_indexes
 
     }
 

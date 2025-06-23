@@ -48,11 +48,11 @@ def main():
 
         parent_folder_name = os.path.basename(os.path.dirname(abs_path))
 
-        output_dir = os.path.join(result_root, parent_folder_name, f"{file_name}_results")
+        output_dir = os.path.join(result_root, parent_folder_name")
 
         os.makedirs(output_dir, exist_ok=True)
 
-        output_json_path = os.path.join(output_dir, "summary.json")
+        output_json_path = os.path.join(output_dir, f"{file_name}.json")
 
         cmd = f"python script.py --compressed '{abs_path}' --output '{output_json_path}' --cache_dir '{args.cache_dir}'"
 
