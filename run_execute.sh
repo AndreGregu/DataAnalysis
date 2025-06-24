@@ -1,11 +1,19 @@
 #!/bin/bash
 #SBATCH --job-name=parallel_execution
+
 #SBATCH --account=project_462000827
+
+
+
 #SBATCH --output=slurm-%j.out
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=50
+
 #SBATCH --mem=250G
+
+
+
 #SBATCH --partition=small
 
 # Check if at least one .zst file is provided
@@ -31,6 +39,12 @@ TOTAL_MEM=$(echo "$CPUS * $MEM_PER_FILE" | bc)
 echo "Running on node: $(hostname)"
 echo "Number of files submitted : $CPUS"
 
+<<<<<<< HEAD
+=======
+# Optional: Activate Python environment
+source /scratch/project_462000953/agregussen/myenv/bin/activate
+
+>>>>>>> origin/master
 # Run execute.py with provided .zst files
 /usr/bin/time -v python execute.py "$@"
 
