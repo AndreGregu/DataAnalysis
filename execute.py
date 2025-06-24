@@ -36,7 +36,7 @@ def main():
 
     commands = []
 
-    result_root = "/scratch/project_462000953/agregussen/results"
+    result_root = "/scratch/project_462000827/agregussen/results"
 
 
 
