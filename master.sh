@@ -1,80 +1,50 @@
 #!/bin/bash
-
 #SBATCH --job-name=master_parallel
-
 #SBATCH --account=project_462000827
-
 #SBATCH --output=master-%j.out
-
 #SBATCH --error=master-%j.err
-
 #SBATCH --time=24:00:00
-
 #SBATCH --partition=small
-
-
-
-# request 4 nodes for coordination only
-
+# coordination job: 1 task, minimal resources
 #SBATCH --nodes=1
-
 #SBATCH --ntasks=1
-
 #SBATCH --cpus-per-task=1
-
 #SBATCH --mem=1G
 
-
-
 if [ "$#" -ne 1 ]; then
-
   echo "Usage: $0 <hplt.files>"
-
   exit 1
-
 fi
-
-
 
 LISTFILE=$1
-
 BASEDIR=/scratch/project_462000953/training/catalogue/hplt/2.0/cleaned
 
-
-
-mapfile -t RELFILES <"$LISTFILE"
-
-if [ "${#RELFILES[@]}" -lt 200 ]; then
-
-  echo "Error: only ${#RELFILES[@]} entries (<200)"
-
+# load relative paths
+mapfile -t RELFILES < "$LISTFILE"
+TOTAL=${#RELFILES[@]}
+if [ "$TOTAL" -eq 0 ]; then
+  echo "Error: no entries found in $LISTFILE"
   exit 1
-
 fi
 
+echo "[MASTER] Found $TOTAL files, splitting into chunks of 40."
 
-
-# build absolute file list of first 200
-
-for i in {0..199}; do
-
-  ABSFILES[i]="$BASEDIR/${RELFILES[i]}"
-
+# build absolute paths
+ABSFILES=()
+for idx in "${!RELFILES[@]}"; do
+  ABSFILES+=("$BASEDIR/${RELFILES[idx]}")
 done
 
+# chunk size and number of chunks
+CHUNK_SIZE=40
+NUM_CHUNKS=$(( (TOTAL + CHUNK_SIZE - 1) / CHUNK_SIZE ))
 
-
-# now loop 4 chunks and sbatch each
-for i in $(seq 0 3); do
-
-  CHUNK=( "${ABSFILES[@]:$((i*50)):50}" )
-
+# submit one batch job per chunk
+for ((i=0;i<NUM_CHUNKS;i++)); do
+  START=$(( i * CHUNK_SIZE ))
+  CHUNK=( "${ABSFILES[@]:START:CHUNK_SIZE}" )
   echo "[MASTER] Submitting chunk #$i with ${#CHUNK[@]} files"
-
   sbatch ./run_execute.sh "${CHUNK[@]}"
-
 done
 
-
-echo "[MASTER] All 4 chunks submitted."
-
+echo "[MASTER] All $NUM_CHUNKS chunks submitted."

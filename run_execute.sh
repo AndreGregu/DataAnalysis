@@ -9,7 +9,7 @@
 
 #SBATCH --ntasks=1
 
-#SBATCH --cpus-per-task=50
+#SBATCH --cpus-per-task=40
 
 #SBATCH --mem=250G
 
@@ -21,9 +21,9 @@ if [ "$#" -lt 1 ]; then
     exit 1
 fi
 
-if [ "$#" -gt 50 ]; then
+if [ "$#" -gt 40 ]; then
 
-    echo "Error: Maximum of 50 files allowed. You provided $#."
+    echo "Error: Maximum of 40 files allowed. You provided $#."
 
     exit 1
 

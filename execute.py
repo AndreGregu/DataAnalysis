@@ -14,7 +14,7 @@ def main():
 
     parser.add_argument("data_files", nargs="+", help="Paths to .zst data files")
 
-    parser.add_argument("--cache_dir", default="/scratch/project_462000827/agregussen/hf_cache", help="Cache directory to store transformer model")
+    parser.add_argument("--cache_dir", default="/project/project_462000953/agregussen/hf_cache", help="Cache directory to store transformer model")
 
     args = parser.parse_args()
 
@@ -36,7 +36,7 @@ def main():
 
     commands = []
 
-    result_root = "/scratch/project_462000827/agregussen/results"
+    result_root = "/project/project_462000953/agregussen/results"
 
 
 
