@@ -40,7 +40,7 @@ fi
 
 ### activate your Python env
 
-source /scratch/project_462000953/agregussen/myenv/bin/activate
+source /scratch/project_462000827/agregussen/myenv/bin/activate
 
 
 

@@ -60,7 +60,9 @@ source myenv/bin/activate
 
 ```bash
 
-pip install transformers zstandard torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+pip install transformers zstandard  
+ 
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 
 ```
 
