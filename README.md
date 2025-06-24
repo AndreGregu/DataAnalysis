@@ -18,7 +18,7 @@ This project provides tools for processing `.zst`-compressed text files using Hu
 
 - `run_execute.sh` — SLURM script to allocate resources and run `execute.py` efficiently on HPC systems.
 
-
+- `master.sh` — Runs multiple jobs of `run_execute.py` on several nodes. 
 
 ---
 
@@ -166,7 +166,7 @@ By default, models are cached to:
 
 ```bash
 
-/scratch/project_462000953/agregussen/hf_cache
+/project/project_462000953/agregussen/hf_cache
 
 ```
 
@@ -210,67 +210,47 @@ project_root/
 
 
 
-Thanks! Here's the updated `Usage` section of the `README.md`, fully corrected and GitHub-rendered, based on your clarification:
-
-
-
----
-
-
-
 ## Usage
 
 
 
-All processing (single or multiple files) is done using:
+Processing of multiple files on several cores accross multiple nodes is done using:
 
 
 
 ```bash
 
-run_execute.sh
+sbatch ./master.sh /project/project_462000953/oe/hplt.files
 
 ```
 
 
 
-You must run the script with one or more `.zst` file paths as arguments.
-
-
-
-### Process a single file
+Processing multiple files on several cores on one node is done using:
 
 
 
 ```bash
 
-bash run_execute.sh data_files/file1.jsonl.zst
+sbatch ./run_execute.sh /project/project_462000953/oe/hplt.files
 
 ```
 
 
 
-### Process multiple files
+> It is important that the following values are cutomized in run_execute.py:
 
 
 
-```bash
+* --account=<your_project>
 
-bash run_execute.sh data_files/file1.jsonl.zst data_files/file2.jsonl.zst data_files/file3.jsonl.zst
+* --time=<expected_time>
 
-```
+* --cpus-per-task=<number_of_files_per_node>
 
+* --mem=<total_memory_per_node>
 
-
-Or use a wildcard to include many files at once:
-
-
-
-```bash
-
-bash run_execute.sh data_files/*.jsonl.zst
-
-```
+* --partition=<type_of_node>
 
 
 
@@ -288,13 +268,13 @@ Each file generates:
 
 ```bash
 
-/<parent_folder>/<filename>_results/summary.json
+/<parent_folder>/<file_name>.json
 
 ```
 
 
 
-Each `summary.json` includes:
+Each `<file_name>.json` includes:
 
 
 
@@ -309,3 +289,7 @@ Each `summary.json` includes:
 * Total tokens
 
 * Execution time
+
+* Error counte
+
+* Error list
