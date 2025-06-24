@@ -48,7 +48,7 @@ def main():
 
         parent_folder_name = os.path.basename(os.path.dirname(abs_path))
 
-        output_dir = os.path.join(result_root, parent_folder_name")
+        output_dir = os.path.join(result_root, parent_folder_name)
 
         os.makedirs(output_dir, exist_ok=True)
 

@@ -14,67 +14,67 @@
 
 
 
-# ask SLURM for 4 nodes, 1 task per node, each with 50 CPUs and 250 GB RAM
+# request 4 nodes for coordination only
 
-#SBATCH --nodes=4
+#SBATCH --nodes=1
 
-#SBATCH --ntasks=4
+#SBATCH --ntasks=1
 
-#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=1
 
-#SBATCH --cpus-per-task=50
-
-#SBATCH --mem=250G
+#SBATCH --mem=1G
 
 
 
-### usage check
+if [ "$#" -ne 1 ]; then
 
-if [ "$#" -ne 200 ]; then
-
-  echo "Usage: $0 file1.zst file2.zst … file200.zst"
+  echo "Usage: $0 <hplt.files>"
 
   exit 1
 
 fi
 
-### activate your Python env
-
-source /scratch/project_462000827/agregussen/myenv/bin/activate
 
 
+LISTFILE=$1
 
-### split the 200‐element argument list into 4 chunks of 50
-
-CHUNK_SIZE=50
-
-for i in $(seq 0 3); do
-
-  # Bash array slicing: skip i*50, take 50 elements
-
-  OFFSET=$(( i * CHUNK_SIZE ))
-
-  CHUNK=( "${@:OFFSET+1:CHUNK_SIZE}" )
+BASEDIR=/scratch/project_462000953/training/catalogue/hplt/2.0/cleaned
 
 
 
-  echo "[INFO] Launching chunk $((i+1)) on node \$SLURM_JOB_NODELIST"
+mapfile -t RELFILES <"$LISTFILE"
 
-  # srun --exclusive: carve out one of the 4 nodes, run one task on it
+if [ "${#RELFILES[@]}" -lt 200 ]; then
 
-  srun --exclusive \
+  echo "Error: only ${#RELFILES[@]} entries (<200)"
 
-       --nodes=1 --ntasks=1 \
+  exit 1
 
-       --cpus-per-task=50 \
+fi
 
-       ./run_execute.sh "${CHUNK[@]}" &
+
+
+# build absolute file list of first 200
+
+for i in {0..199}; do
+
+  ABSFILES[i]="$BASEDIR/${RELFILES[i]}"
 
 done
 
 
 
-wait
+# now loop 4 chunks and sbatch each
+for i in $(seq 0 3); do
 
-echo "[INFO] All 4 chunks are now running. Master script exits."
+  CHUNK=( "${ABSFILES[@]:$((i*50)):50}" )
+
+  echo "[MASTER] Submitting chunk #$i with ${#CHUNK[@]} files"
+
+  sbatch ./run_execute.sh "${CHUNK[@]}"
+
+done
+
+
+echo "[MASTER] All 4 chunks submitted."
 
