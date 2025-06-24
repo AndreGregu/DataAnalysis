@@ -208,7 +208,7 @@ def main():
 
 	"error_count": malformed_count,
 
-	"error_indexes": malformed_indexes
+	"error_indexes": malformed_lines
 
     }
 
