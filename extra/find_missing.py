@@ -41,7 +41,7 @@ def main():
 	result = find_files(args.results_dir)
 	print(f"{len(result)}")
 	missing = find_missing(expected, result)
-	print(f"{missing}")
+	print(f"{len(missing)}")
 	
 if __name__ == "__main__":
 	main()
