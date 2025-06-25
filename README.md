@@ -26,7 +26,7 @@ This project provides tools for processing `.zst`-compressed text files using Hu
 
 - `extra/find_missing` — Finds the missing files between two argument inputs, one beeing a list of files and the other a folder, and creates a new list. 
 
-
+- `extra/count_metrics` — Calculates the total metrics per language and stores the results in the correct folder as `summary_all.json`.
 
 ---
 
