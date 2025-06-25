@@ -154,6 +154,10 @@ Then paste your token from [https://huggingface.co/settings/tokens](https://hugg
 
 Ensure the token has **access to gated models**.
 
+> You need to download the model before you run the program accross several nodes.
+
+> If you dont, the authentication of the model fails on the remote nodes, and the process will be terminated.
+
 
 
 ### Model Cache
