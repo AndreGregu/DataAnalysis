@@ -41,10 +41,10 @@ def main():
     description="Count total metrics per language and create a total count file..") 
     p.add_argument("dir_path", help="Path to directory")
     args = p.parse_args()
-
     new_files = create_summary(args.dir_path)
     for i in new_files:
         print(f"{i}")
     print(f"{len(new_files)}")
+
 if __name__ == "__main__":
     main()

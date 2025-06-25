@@ -35,7 +35,6 @@ def main():
     p.add_argument("file_list", help="Path to text file listing expected filenames")
     p.add_argument("results_dir", nargs="?", default="../../results", help="Directory where files should be present")
     args = p.parse_args()
-
     expected = process_files(args.file_list)
     print(f"{len(expected)}")
     result = find_files(args.results_dir)

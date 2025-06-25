@@ -15,12 +15,10 @@ def print_tree(startpath):
 def main():
     parser = argparse.ArgumentParser(description="Recursively print tree structure of a directory.")
     parser.add_argument("folder", help="Path to the folder")
-    args = parser.parse_args()
-    
+    args = parser.parse_args()    
     if not os.path.isdir(args.folder):
         print(f"Error: '{args.folder}' is not a directory.")
         return
-
     print_tree(os.path.abspath(args.folder))
 
 if __name__ == "__main__":
