@@ -250,15 +250,19 @@ sbatch ./run_execute.sh /project/project_462000953/oe/hplt.files
 
 
 
-* --account=<your_project>
+```bash
 
-* --time=<expected_time>
+#SBATCH --account=<your_project>
 
-* --cpus-per-task=<number_of_files_per_node>
+#SBATCH --time=<expected_time>
 
-* --mem=<total_memory_per_node>
+#SBATCH --cpus-per-task=<number_of_files_per_node>
 
-* --partition=<type_of_node>
+#SBATCH --mem=<total_memory_per_node>
+
+#SBATCH --partition=<type_of_node>
+
+```
 
 
 
