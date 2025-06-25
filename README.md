@@ -20,6 +20,14 @@ This project provides tools for processing `.zst`-compressed text files using Hu
 
 - `master.sh` — Runs multiple jobs of `run_execute.py` on several nodes. 
 
+- `extra/model.py` — Downloads the gemma3 model to a `hf_cache`-folder two parent-directories up.
+
+- `extra/tree.py` — Prints the tree-structure of a desired directory.
+
+- `extra/find_missing` — Finds the missing files between two argument inputs, one beeing a list of files and the other a folder, and creates a new list. 
+
+
+
 ---
 
 
@@ -154,8 +162,7 @@ Then paste your token from [https://huggingface.co/settings/tokens](https://hugg
 
 Ensure the token has **access to gated models**.
 
->**Note:** You need to download the model before you run the program accross several nodes. 
-> If you dont, the authentication of the model fails on the remote nodes, and the process will be terminated.
+>**Note:** You need to download the model before you run the program accross several nodes. If you dont, the authentication of the model fails on the remote nodes, and the process will be terminated.
 
 
 

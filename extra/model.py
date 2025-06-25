@@ -1,6 +1,6 @@
 import os
 
-os.environ['TRANSFORMERS_CACHE'] = '../hf_cache'
+os.environ['TRANSFORMERS_CACHE'] = '../../hf_cache'
 
 
 
