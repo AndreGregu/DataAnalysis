@@ -48,6 +48,10 @@ module load cray-python
 
 
 
+>**Note:** Sometimes the python module is not loaded in the virtual environment. Reload the module to fix. 
+
+
+
 ### 2. Create and activate a virtual environment
 
 
@@ -219,6 +223,18 @@ project_root/
 
 
 ## Usage
+
+
+
+Make the SLURM-script executable:
+
+
+
+```bash
+
+chmod +x <path>/master.sh <path>/run_execute.sh
+
+```
 
 
 
