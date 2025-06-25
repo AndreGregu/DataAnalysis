@@ -203,9 +203,7 @@ project_root/
 
 
 
->**Note:** Data-sets are not included in the repo due to dataset size.
-
-> Download from: [https://hplt-project.org/datasets/v2.0](https://hplt-project.org/datasets/v2.0)
+>**Note:** Data-sets are not included in the repo due to dataset size. Download from: [https://hplt-project.org/datasets/v2.0](https://hplt-project.org/datasets/v2.0)
 
 
 
