@@ -154,8 +154,7 @@ Then paste your token from [https://huggingface.co/settings/tokens](https://hugg
 
 Ensure the token has **access to gated models**.
 
-> You need to download the model before you run the program accross several nodes.
-
+>**Note:** You need to download the model before you run the program accross several nodes. 
 > If you dont, the authentication of the model fails on the remote nodes, and the process will be terminated.
 
 
@@ -204,7 +203,7 @@ project_root/
 
 
 
-> Data-sets are not included in the repo due to dataset size.
+>**Note:** Data-sets are not included in the repo due to dataset size.
 
 > Download from: [https://hplt-project.org/datasets/v2.0](https://hplt-project.org/datasets/v2.0)
 
@@ -242,7 +241,7 @@ sbatch ./run_execute.sh /project/project_462000953/oe/hplt.files
 
 
 
-> It is important that the following values are cutomized in run_execute.py:
+>**Note:** It is important that the following values are cutomized in run_execute.py:
 
 
 
