@@ -14,7 +14,7 @@ def decompress_and_count(compressed_path, tokenizer, char_buffer_size=80_000_000
     buffer = []
     buffer_append = buffer.append
     char_buffer_len = 0
-    dctx = zstd.ZstdDecompressor()
+    dctx = zstd.ZstdDecompressor())
     with open(compressed_path, 'rb') as compressed_file:
         with dctx.stream_reader(compressed_file) as reader:
             text_stream = io.TextIOWrapper(reader, encoding='utf-8', errors='replace')
@@ -33,11 +33,11 @@ def decompress_and_count(compressed_path, tokenizer, char_buffer_size=80_000_000
                 total_characters += char_len
                 char_buffer_len += char_len
                 if char_buffer_len >= char_buffer_size:
+                    log_meminfo("before tokenization")
                     total_tokens += tokenize_batch(buffer, tokenizer)
                     buffer.clear()
                     char_buffer_len = 0
-                    if total_docs % 10_000 == 0:
-                        print(f"[INFO] Processed {total_docs:,} documents...")
+                    log_meminfo("after tokenization")
             if buffer:
                 total_tokens += tokenize_batch(buffer, tokenizer)
     return file_size, total_docs, total_segments, total_characters, total_tokens,  malformed_count, malformed_lines
@@ -58,6 +58,11 @@ def format_seconds(seconds):
     m = int((seconds % 3600) // 60)
     s = int(seconds % 60)
     return f"{h:02}:{m:02}:{s:02}"
+
+def log_meminfo(tag=""):
+    with open("/proc/meminfo") as f:
+        meminfo = f.read().strip()
+    print(f"===== meminfo {tag} =====\n{meminfo}\n{'='*30}")
 
 def main():
     parser = argparse.ArgumentParser(description="Efficiently process and tokenize a compressed .zst file.")

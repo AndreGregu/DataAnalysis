@@ -4,7 +4,7 @@
 #SBATCH --output=slurm-%j.out
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=30
+#SBATCH --cpus-per-task=20
 #SBATCH --mem=250G
 #SBATCH --partition=small
 
@@ -30,4 +30,3 @@ echo "Number of files submitted : $CPUS"
 
 # Run execute.py with provided .zst files
 /usr/bin/time -v python execute.py "$@"
-

@@ -39,10 +39,10 @@ def main():
     result = find_files(args.results_dir)
     missing = find_missing(expected, result)
     print(f"{len(expected)} expected, {len(result)} found, {len(missing)} missing")
-    output_path = os.path.join(os.getcwd(), "missing.files") 
-    with open(output_path , "w") as out: 
-        for fn in missing: 
-            out.write(f"{fn}.jsonl.zst" + "\n")
+#    output_path = os.path.join(os.getcwd(), "missing.files") 
+#    with open(output_path , "w") as out: 
+#        for fn in missing: 
+#            out.write(f"{fn}.jsonl.zst" + "\n")
 	
 if __name__ == "__main__":
     main()
