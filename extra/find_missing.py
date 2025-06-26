@@ -36,11 +36,13 @@ def main():
     p.add_argument("results_dir", nargs="?", default="../../results", help="Directory where files should be present")
     args = p.parse_args()
     expected = process_files(args.file_list)
-    print(f"{len(expected)}")
     result = find_files(args.results_dir)
-    print(f"{len(result)}")
     missing = find_missing(expected, result)
-    print(f"{len(missing)}")
+    print(f"{len(expected)} expected, {len(result)} found, {len(missing)} missing")
+    output_path = os.path.join(os.getcwd(), "missing.files") 
+    with open(output_path , "w") as out: 
+        for fn in missing: 
+            out.write(f"{fn}.jsonl.zst" + "\n")
 	
 if __name__ == "__main__":
     main()

@@ -9,7 +9,7 @@
 
 #SBATCH --ntasks=1
 
-#SBATCH --cpus-per-task=40
+#SBATCH --cpus-per-task=30
 
 #SBATCH --mem=250G
 
@@ -22,11 +22,8 @@ if [ "$#" -lt 1 ]; then
 fi
 
 if [ "$#" -gt 40 ]; then
-
     echo "Error: Maximum of 40 files allowed. You provided $#."
-
     exit 1
-
 fi
 
 # Calculate CPU and memory requirements (limited by hardware)

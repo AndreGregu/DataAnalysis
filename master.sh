@@ -27,7 +27,7 @@ if [ "$TOTAL" -eq 0 ]; then
   exit 1
 fi
 
-echo "[MASTER] Found $TOTAL files, splitting into chunks of 40."
+echo "[MASTER] Found $TOTAL files, splitting into chunks of 30."
 
 # build absolute paths
 ABSFILES=()
@@ -36,7 +36,7 @@ for idx in "${!RELFILES[@]}"; do
 done
 
 # chunk size and number of chunks
-CHUNK_SIZE=40
+CHUNK_SIZE=30
 NUM_CHUNKS=$(( (TOTAL + CHUNK_SIZE - 1) / CHUNK_SIZE ))
 
 # submit one batch job per chunk
