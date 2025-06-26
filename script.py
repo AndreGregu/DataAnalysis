@@ -14,7 +14,7 @@ def decompress_and_count(compressed_path, tokenizer, char_buffer_size=80_000_000
     buffer = []
     buffer_append = buffer.append
     char_buffer_len = 0
-    dctx = zstd.ZstdDecompressor())
+    dctx = zstd.ZstdDecompressor()
     with open(compressed_path, 'rb') as compressed_file:
         with dctx.stream_reader(compressed_file) as reader:
             text_stream = io.TextIOWrapper(reader, encoding='utf-8', errors='replace')
