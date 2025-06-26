@@ -1,18 +1,11 @@
 #!/bin/bash
 #SBATCH --job-name=parallel_execution
-
 #SBATCH --account=project_462000827
-
 #SBATCH --output=slurm-%j.out
-
 #SBATCH --time=24:00:00
-
 #SBATCH --ntasks=1
-
 #SBATCH --cpus-per-task=30
-
 #SBATCH --mem=250G
-
 #SBATCH --partition=small
 
 # Check if at least one .zst file is provided
