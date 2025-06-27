@@ -12,21 +12,21 @@ This project provides tools for processing `.zst`-compressed text files using Hu
 
 
 
-- `script.py` — Processes a single `.zst` file: decompresses, tokenizes, and collects text statistics.
-
-- `execute.py` — Executes `script.py` in parallel across multiple `.zst` files and manages output directories.
-
-- `run_execute.sh` — SLURM script to allocate resources and run `execute.py` efficiently on HPC systems.
-
-- `master.sh` — Runs multiple jobs of `run_execute.py` on several nodes. 
-
 - `extra/model.py` — Downloads the gemma3 model to a `hf_cache`-folder two parent-directories up.
 
 - `extra/tree.py` — Prints the tree-structure of a desired directory.
 
-- `extra/find_missing.py` — Finds the missing files between a list of files and the `results`-folder, and creates a new list `missing.files`. 
+- `extra/find_missing.py` — Finds the missing files between a list of files and the `results`-folder, and create>
 
 - `extra/count_metrics.py` — Calculates the total metrics per language..
+
+- `execute.py` — Executes `script.py` in parallel across multiple `.zst` files and manages output directories.
+
+- `master.sh` — Runs multiple jobs of `run_execute.py` on several nodes. 
+
+- `run_execute.sh` — SLURM script to allocate resources and run `execute.py` efficiently on HPC systems.
+
+- `script.py` — Processes a single `.zst` file: decompresses, tokenizes, and collects text statistics.
 
 ---
 
@@ -202,14 +202,6 @@ You can change this using the `--cache_dir` argument when running `execute.py`.
 
 project_root/
 
-├── script.py                  # Processes one compressed text file
-
-├── execute.py                 # Runs script.py in parallel
-
-├── run_execute.sh             # SLURM job submission script
-
-├── README.md                  # This file
-
 ├── extra/                     # Sub-folder with additional scripts
 
 │   └── count_metrics.py       # Summarizes the metrics of the results
@@ -219,6 +211,16 @@ project_root/
 │   └── model.py               # Downloads the hf-model
 
 │   └── tree.py                # Prints the tree-structure of a folder
+
+├── README.md                  # This file
+
+├── execute.py                 # Runs script.py in parallel on several cores
+
+├── master.sh                  # Master script to distribute run_execute.sh on several nodes
+
+├── run_execute.sh             # SLURM job submission script
+
+├── script.py                  # Processes one compressed text file
 
 ```
 
