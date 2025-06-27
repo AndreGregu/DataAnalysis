@@ -8,25 +8,31 @@ This project provides tools for processing `.zst`-compressed text files using Hu
 
 
 
+---
+
+
+
 ## Contents
 
 
 
-- `extra/model.py` — Downloads the gemma3 model to a `hf_cache`-folder two parent-directories up.
+* `extra/model.py` — Downloads the gemma3 model to a `hf_cache`-folder two parent-directories up.
 
-- `extra/tree.py` — Prints the tree-structure of a desired directory.
+* `extra/tree.py` — Prints the tree-structure of a desired directory.
 
-- `extra/find_missing.py` — Finds the missing files between a list of files and the `results`-folder, and create>
+* `extra/find_missing.py` — Finds the missing files between a list of files and the `results`-folder, and create>
 
-- `extra/count_metrics.py` — Calculates the total metrics per language..
+* `extra/count_metrics.py` — Calculates the total metrics per language..
 
-- `execute.py` — Executes `script.py` in parallel across multiple `.zst` files and manages output directories.
+* `execute.py` — Executes `script.py` in parallel across multiple `.zst` files and manages output directories.
 
-- `master.sh` — Runs multiple jobs of `run_execute.py` on several nodes. 
+* `master.sh` — Runs multiple jobs of `run_execute.py` on several nodes. 
 
-- `run_execute.sh` — SLURM script to allocate resources and run `execute.py` efficiently on HPC systems.
+* `run_execute.sh` — SLURM script to allocate resources and run `execute.py` efficiently on HPC systems.
 
-- `script.py` — Processes a single `.zst` file: decompresses, tokenizes, and collects text statistics.
+* `script.py` — Processes a single `.zst` file: decompresses, tokenizes, and collects text statistics.
+
+
 
 ---
 
