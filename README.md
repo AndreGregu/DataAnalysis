@@ -26,7 +26,7 @@ This project provides tools for processing `.zst`-compressed text files using Hu
 
 - `extra/find_missing.py` — Finds the missing files between a list of files and the `results`-folder, and creates a new list `missing.files`. 
 
-- `extra/count_metrics.py` — Calculates the total metrics per language and stores the results in the correct folder as `summary_all.json`.
+- `extra/count_metrics.py` — Calculates the total metrics per language..
 
 ---
 
@@ -202,13 +202,23 @@ You can change this using the `--cache_dir` argument when running `execute.py`.
 
 project_root/
 
-├── script.py          # Processes one compressed text file
+├── script.py                  # Processes one compressed text file
 
-├── execute.py         # Runs script.py in parallel
+├── execute.py                 # Runs script.py in parallel
 
-├── run_execute.sh     # SLURM job submission script
+├── run_execute.sh             # SLURM job submission script
 
-├── README.md          # This file
+├── README.md                  # This file
+
+├── extra/                     # Sub-folder with additional scripts
+
+│   └── count_metrics.py       # Summarizes the metrics of the results
+
+│   └── find_missing.py        # Compares a file list and a folder and finds missing files
+
+│   └── model.py               # Downloads the hf-model
+
+│   └── tree.py                # Prints the tree-structure of a folder
 
 ```
 
@@ -318,6 +328,18 @@ Each `<file_name>.json` includes:
 
 * Execution time
 
-* Error counte
+* Error count
 
 * Error list
+
+
+
+### Summarize the metrics
+
+
+
+Using the file `count_metrics.py` with the folder containing the results as argument will generate: 
+
+* A summary of the metrics for each language stored as `summary.json` in the pertaining folder
+
+* A total summary of all `summary.json` files stored as `total_summary.json` in the results-folder
