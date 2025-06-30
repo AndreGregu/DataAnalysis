@@ -23,10 +23,11 @@ def process_files(path):
 def find_missing(expected, result):
     missing = []
     for file in expected:
-        if file in result:
+        sub_filepath = os.path.join(os.path.basename(os.path.dirname(file)), os.path.basename(file))
+        if sub_filepath in result:
             continue
         else:
-            missing.append(file)
+            missing.append(sub_filepath)
     return missing
 
 def main():
@@ -39,10 +40,10 @@ def main():
     result = find_files(args.results_dir)
     missing = find_missing(expected, result)
     print(f"{len(expected)} expected, {len(result)} found, {len(missing)} missing")
-#    output_path = os.path.join(os.getcwd(), "missing.files") 
-#    with open(output_path , "w") as out: 
-#        for fn in missing: 
-#            out.write(f"{fn}.jsonl.zst" + "\n")
+    output_path = os.path.join(os.getcwd(), "missing_files.files") 
+    with open(output_path , "w") as out: 
+        for fn in missing: 
+            out.write(f"{fn}.jsonl.zst" + "\n")
 	
 if __name__ == "__main__":
     main()
