@@ -26,7 +26,7 @@ def main():
     print("[INFO] Starting parallel execution...")
     parallel_input = "\n".join(commands)
     subprocess.run(
-        ["../tools/parallel-20250522/src/parallel", "--line-buffer", "-j", str(len(commands))],
+        ["/project/project_462000953/agregussen/tools/parallel-20250522/src/parallel", "--line-buffer", "-j", str(len(commands))],
         input=parallel_input.encode(),
         check=True
     )

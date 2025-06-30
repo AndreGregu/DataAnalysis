@@ -24,13 +24,21 @@ This project provides tools for processing `.zst`-compressed text files using Hu
 
 * `extra/count_metrics.py` — Calculates the total metrics per language..
 
-* `execute.py` — Executes `script.py` in parallel across multiple `.zst` files and manages output directories.
+* `parallel/script.py` — Processes a single `.zst` file: decompresses, tokenizes, and collects text statistics.
 
-* `master.sh` — Runs multiple jobs of `run_execute.py` on several nodes. 
+* `parallel/execute.py` — Executes pertaining `script.py` in parallel across multiple `.zst` files and manages output directories.
 
-* `run_execute.sh` — SLURM script to allocate resources and run `execute.py` efficiently on HPC systems.
+* `parallel/run_execute.sh` — SLURM script to allocate resources and run pertaining `execute.py` efficiently on HPC systems.
 
-* `script.py` — Processes a single `.zst` file: decompresses, tokenizes, and collects text statistics.
+* `parallel/master.sh` — Runs multiple jobs of pertaining `run_execute.py` on several nodes.
+
+* `duplicates/script.py` — Processes a single `.zst` file: decompresses, gathers unique URLs and domains..
+
+* `duplicates/execute.py` — Executes pertaining `script.py` in parallel across multiple `.zst` files and manages output directories.
+
+* `duplicates/run_execute.sh` — SLURM script to allocate resources and run pertaining `execute.py` efficiently on HPC systems.
+
+* `duplicates/master.sh` — Runs multiple jobs of pertaining `run_execute.py` on several nodes.
 
 
 
@@ -126,7 +134,7 @@ sudo apt install parallel
 
 ```bash
 
-["../parallel-20250522/src/parallel", ...]
+["/project/project_462000953/agregussen/parallel-20250522/src/parallel", ...]
 
 ```
 
@@ -220,13 +228,23 @@ project_root/
 
 ├── README.md                  # This file
 
-├── execute.py                 # Runs script.py in parallel on several cores
+├── parallel/ 
 
-├── master.sh                  # Master script to distribute run_execute.sh on several nodes
+│   └── script.py                  # Processes one compressed text file
 
-├── run_execute.sh             # SLURM job submission script
+│   └── execute.py                 # Runs script.py in parallel on several cores
 
-├── script.py                  # Processes one compressed text file
+│   └── run_execute.sh             # SLURM job submission script
+
+│   └── master.sh                  # Master script to distribute run_execute.sh on several nodes
+
+├── duplicates/ 
+
+│   └── script.py                  # Processes one compressed text file
+
+│   └── execute.py                 # Runs script.py in parallel on several cores
+
+│   └── run_execute.sh             # SLURM job submission scripts
 
 ```
 
