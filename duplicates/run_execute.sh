@@ -24,9 +24,5 @@ CPUS="$#"
 MEM_PER_FILE=25
 TOTAL_MEM=$(echo "$CPUS * $MEM_PER_FILE" | bc) 
 
-# Inform the user
-echo "Running on node: $(hostname)"
-echo "Number of files submitted : $CPUS"
-
 # Run execute.py with provided .zst files
 /usr/bin/time -v python execute.py "$@"

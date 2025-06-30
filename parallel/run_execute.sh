@@ -19,11 +19,6 @@ if [ "$#" -gt 40 ]; then
     exit 1
 fi
 
-# Calculate CPU and memory requirements (limited by hardware)
-CPUS="$#"
-MEM_PER_FILE=4.8
-TOTAL_MEM=$(echo "$CPUS * $MEM_PER_FILE" | bc) 
-
 # Inform the user
 echo "Running on node: $(hostname)"
 echo "Number of files submitted : $CPUS"
