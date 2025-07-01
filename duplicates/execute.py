@@ -2,9 +2,10 @@ import argparse
 import os
 import subprocess
 import sys
-from pathlib import Path
 import glob
 import json
+from collections import Counter
+from pathlib import Path
 
 def main():
     parser = argparse.ArgumentParser(description="Use GNU Parallel to run script.py on multiple .zst files.")
@@ -30,37 +31,50 @@ def main():
         check=True
     )
     print("[INFO] All processes completed.")
-    result_files = glob.glob("result*")
-    combined_domains = []
-    combined_urls = []
-    combined_duplicates = 0
+    result_files = sorted(glob.glob("result*"))
+    combined_domains = Counter()
+    combined_urls = Counter()
     for file in result_files: 
         with open(file, "r", encoding='utf-8') as f:
             data = json.load(f)
-            domains = data.get("domains", [])
-            urls = data.get("urls", [])
-            combined_duplicates = data.get("duplicates")
-            for u in urls: 
-                if not u in combined_urls: 
-                    combined_urls.append(u)
-                else: 
-                    combined_duplicates += 1
-            for d in domains:
-                if not d in combined_domains: 
-                    combined_domains.append(d)
+            for entry in data.get("urls", []):
+                url = entry.get("url")
+                count = entry.get("count", 1)
+                if url: 
+                    combined_urls[url] += count
+            for entry in data.get("domians", []):
+                dom = entry.get("domain")
+                count = entry.get("count", 1)
+                if dom: 
+                    combined_domains[dom] += count
             try:
                 os.remove(file)
                 print(f"Deleted {file}")
             except OSError as e:
                 print(f"Error deleting {file}: {e}")
+    total_duplicates = sum(count -1 for count in combined_urls.values() if count > 1)
+    sorted_urls = [
+        {"url": url, "count": count}
+        for url, count in combined_urls.most_common()
+    ]
+    sorted_domains = [
+        {"domain": dom, "count": count}
+        for dom, count in combined_domains.most_common()
+    ]
     result = {
-        "domains": combined_domains, 
-        "urls": combined_urls, 
-        "duplicates": combined_duplicates,
+        "duplicate_urls": total_duplicates,
+        "urls": sorted_urls, 
+        "domains": sorted_domains, 
     }
     with open("result.json", "w", encoding="utf-8") as out: 
         json.dump(result, out, indent=2)
         out.write("\n")
-   
+    print(
+        f"[INFO] Wrote result.json: "
+        f"{len(sorted_urls)} unique URLs, "
+        f"{len(sorted_domains)} unique domains, "
+        f"{total_duplicates} total duplicates"
+    )
+
 if __name__ == "__main__":
     main()
