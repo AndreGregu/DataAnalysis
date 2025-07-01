@@ -12,11 +12,7 @@ def decompress_and_count(compressed_path):
     with open(compressed_path, 'rb') as compressed_file: 
         with dctx.stream_reader(compressed_file) as reader: 
             text_stream = io.TextIOWrapper(reader, encoding='utf-8', errors='replace')
-            i = 0
             for line in text_stream:
-                i += 1
-                if i > 10000: 
-                    break
                 try:
                     doc = json.loads(line)
                 except json.JSONDecodeError:
