@@ -4,11 +4,18 @@ import json
 from urllib.parse import urlparse
 import zstandard as zstd
 from collections import Counter
+import os
 
 def decompress_and_count(compressed_path):
     domains = Counter()
     urls = Counter()
     dctx = zstd.ZstdDecompressor()
+    parts = compressed_path.split(os.sep)
+    try:
+        idx = parts.index("catalogue")
+        catalogue_type = parts[idx + 1]
+    except (ValueError, IndexError):
+        raise ValueError(f"Path doesn’t contain a catalogue subfolder: {compressed_path!r}")
     with open(compressed_path, 'rb') as compressed_file: 
         with dctx.stream_reader(compressed_file) as reader: 
             text_stream = io.TextIOWrapper(reader, encoding='utf-8', errors='replace')
@@ -17,8 +24,14 @@ def decompress_and_count(compressed_path):
                     doc = json.loads(line)
                 except json.JSONDecodeError:
                     continue
-                url = doc.get("u", "")
-                if not url:
+                if catalogue_type == "fineweb":
+                    val = "url"
+                elif catalogue_type == "hplt":
+                    val = "u"
+                else:
+                    raise ValueError(f"Unexpected catalogue type {catalogue_type!r} in {compressed_path}")
+                url = doc.get(val, "")
+                if not url:	
                     continue
                 urls[url] += 1
                 hostname = urlparse(url).hostname
@@ -44,7 +57,7 @@ def main():
     result = {
         "duplicate_urls": duplicate_count, 
         "urls": sorted_urls, 
-        "domians": sorted_domains,
+        "domains": sorted_domains,
     }
     with open(args.output, "w", encoding="utf-8") as f:
         json.dump(result, f, indent=2)

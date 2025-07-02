@@ -45,7 +45,7 @@ def create_summary(path):
     total_summary = {
         "number_of_languages": total_languages,
         "number_of_files": total_file_count,
-        "language_size": total_size,
+        "size": total_size,
         "documents": total_documents,
         "segments": total_segments,
         "characters": total_characters,

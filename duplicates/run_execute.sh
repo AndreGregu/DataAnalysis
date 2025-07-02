@@ -4,8 +4,8 @@
 #SBATCH --output=slurm-%j.out
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=2
-#SBATCH --mem=50G
+#SBATCH --cpus-per-task=40
+#SBATCH --mem=250G
 #SBATCH --partition=small
 
 # Check if at least one .zst file is provided
@@ -14,7 +14,7 @@ if [ "$#" -lt 1 ]; then
     exit 1
 fi
 
-if [ "$#" -gt 2 ]; then
+if [ "$#" -gt 40 ]; then
     echo "Error: Maximum of 40 files allowed. You provided $#."
     exit 1
 fi

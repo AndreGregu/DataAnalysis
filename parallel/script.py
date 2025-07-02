@@ -40,7 +40,8 @@ def decompress_and_count(compressed_path, tokenizer, char_buffer_size=80_000_000
                     log_meminfo("after tokenization")
             if buffer:
                 total_tokens += tokenize_batch(buffer, tokenizer)
-    return file_size, total_docs, total_segments, total_characters, total_tokens,  malformed_count, malformed_lines
+    total_segments += total_docs
+    return file_size, total_docs, total_segments, total_characters, total_tokens, malformed_count, malformed_lines
 
 def tokenize_batch(lines, tokenizer):
     encoded = tokenizer(
@@ -78,7 +79,7 @@ def main():
         cache_dir=args.cache_dir,
         use_fast=True
     )
-    file_size, docs, segments, characters, tokens, malformed_count, malformed_lines  = decompress_and_count(args.compressed, tokenizer)
+    file_size, docs, segments, characters, tokens, malformed_count, malformed_lines = decompress_and_count(args.compressed, tokenizer)
     elapsed_time = time.time() - start_time
     formatted_time = format_seconds(elapsed_time)
     result = {
@@ -90,6 +91,7 @@ def main():
         "execution_time": formatted_time,
 	"error_count": malformed_count,
 	"error_indexes": malformed_lines
+
     }
     with open(args.output, "w", encoding="utf-8") as f:
         json.dump(result, f, indent=2)
