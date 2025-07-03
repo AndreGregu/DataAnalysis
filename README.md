@@ -24,13 +24,13 @@ This project provides tools for processing `.zst`-compressed text files using Hu
 
 * `extra/count_metrics.py` — Calculates the total metrics per language..
 
-* `parallel/script.py` — Processes a single `.zst` file: decompresses, tokenizes, and collects text statistics.
+* `metrics/script.py` — Processes a single `.zst` file: decompresses, tokenizes, and collects text statistics.
 
-* `parallel/execute.py` — Executes pertaining `script.py` in parallel across multiple `.zst` files and manages output directories.
+* `metrics/execute.py` — Executes pertaining `script.py` in parallel across multiple `.zst` files and manages output directories.
 
-* `parallel/run_execute.sh` — SLURM script to allocate resources and run pertaining `execute.py` efficiently on HPC systems.
+* `metrics/run_execute.sh` — SLURM script to allocate resources and run pertaining `execute.py` efficiently on HPC systems.
 
-* `parallel/master.sh` — Runs multiple jobs of pertaining `run_execute.py` on several nodes.
+* `metrics/master.sh` — Runs multiple jobs of pertaining `run_execute.py` on several nodes.
 
 * `duplicates/script.py` — Processes a single `.zst` file: decompresses, gathers unique URLs and domains..
 
@@ -38,7 +38,7 @@ This project provides tools for processing `.zst`-compressed text files using Hu
 
 * `duplicates/run_execute.sh` — SLURM script to allocate resources and run pertaining `execute.py` efficiently on HPC systems.
 
-* `duplicates/master.sh` — Runs multiple jobs of pertaining `run_execute.py` on several nodes.
+* `duplicates/compare.py` — Compares the different result files in a language, and creates a summary file called `result.json`, which are compared to each other to create a `summary.json` file.
 
 
 
@@ -200,7 +200,7 @@ By default, models are cached to:
 
 
 
-You can change this using the `--cache_dir` argument when running `execute.py`.
+You can change this using the `--cache_dir` argument when running `metrics/execute.py`.
 
 
 
@@ -228,7 +228,7 @@ project_root/
 
 ├── README.md                  # This file
 
-├── parallel/ 
+├── metrics/ 
 
 │   └── script.py                  # Processes one compressed text file
 
@@ -246,6 +246,8 @@ project_root/
 
 │   └── run_execute.sh             # SLURM job submission scripts
 
+│   └── compare.py	 	   # Creates summaries of the different jobs
+
 ```
 
 
@@ -262,43 +264,46 @@ project_root/
 
 
 
+### Code for counting metrics
+
+
 Make the SLURM-script executable:
 
 
 
 ```bash
 
-chmod +x <path>/master.sh <path>/run_execute.sh
+chmod +x <path>/<file_name>
 
 ```
 
 
 
-Processing of multiple files on several cores accross multiple nodes is done using:
+Counting the metrics of multiple files on several cores accross multiple nodes is done using:
 
 
 
 ```bash
 
-sbatch ./master.sh /project/project_462000953/oe/hplt.files
+sbatch metrics/master.sh /project/project_462000953/oe/hplt.files
 
 ```
 
 
 
-Processing multiple files on several cores on one node is done using:
+Counting the metrics for multiple files on several cores on one node is done using:
 
 
 
 ```bash
 
-sbatch ./run_execute.sh /project/project_462000953/oe/hplt.files
+sbatch metrics/run_execute.sh /project/project_462000953/oe/hplt.files
 
 ```
 
 
 
->**Note:** It is important that the following values are cutomized in run_execute.py:
+>**Note:** It is important that the following values are cutomized in metrics/run_execute.py:
 
 
 
@@ -318,11 +323,35 @@ sbatch ./run_execute.sh /project/project_462000953/oe/hplt.files
 
 
 
+### Code for counting duplicates
+
+
+
+Provide all files for a language in both HPLT and Fineweb to `duplicates/run_execute.sh` (the code will sort the two) as such: 
+
+
+
+```bash  
+
+sbatch run_execute.sh $(find /project/project_462000953/scratch/training/catalogue/fineweb/2.1.0/data/nob_Latn/train/ -name "*zst") $(find /project/project_462000953/scratch/training/catalogue/hplt/2.0/cleaned/nob_Latn/ -name "*.zst")
+
+``` 
+
+
+
+It is also possible to only count for one dataset type (i.e HPLT) by only providing files in the HPLT folder. 
+
+
+
 ---
 
 
 
 ## Output
+
+
+
+### Code for counting metrics
 
 
 
@@ -338,25 +367,29 @@ Each file generates:
 
 
 
+Where `parent_folder` is the language (i.e. the subfolder in which the file is stored)
+
+
+
 Each `<file_name>.json` includes:
 
 
 
-* File size (bytes)
+* `{file_size}` — File size (bytes)
 
-* Number of documents
+* `{documents}` — Number of documents
 
-* Number of segments
+* `{segments}` — Number of segments
 
-* Total characters
+* `{characters}` — Total characters
 
-* Total tokens
+* `{tokens}` — Total tokens
 
-* Execution time
+* `{execution_time}` — Execution time
 
-* Error count
+* `{error_count}` — Error count
 
-* Error list
+* `{error_indexes}` — Error list
 
 
 
@@ -366,6 +399,87 @@ Each `<file_name>.json` includes:
 
 Using the file `count_metrics.py` with the folder containing the results as argument will generate: 
 
+
+
+
 * A summary of the metrics for each language stored as `summary.json` in the pertaining folder
 
 * A total summary of all `summary.json` files stored as `total_summary.json` in the results-folder
+
+
+
+### Code for counting duplicates
+
+
+
+The code wil create a folder in the current directory called `duplication_results/` which will include: 
+
+
+
+* A folder for HPLT files called `HPLT`
+
+* A folder for Fineweb files called `Fineweb`
+
+
+
+In each folder, a `results.json` file will be generated which includes: 
+
+
+
+* `{duplicate_urls}` — Number of duplicate URLs
+
+* `{urls}` — All URLs in a list with the number of times the appear. 
+
+* `{domains}` — All domains in a list with the number of times they appear.
+
+* `{duplicate_signatures}` — Number of duplicate Signatures
+
+* `{signatures}` —  All signatures in a list with the number of times they appear. 
+
+
+
+In addition, a file called `summary.json` will be generated in the `suplicateion_results/` folder which includes: 
+
+
+
+```bash
+
+{
+
+  "hplt": {
+
+    "duplicate_urls": …,
+
+    "duplicate_signatures": …,
+
+    "urlss_count": …,
+
+    "domainss_count": …,
+
+    "signaturess_count": …
+
+  },
+
+  "fineweb": {
+
+    "duplicate_urls": …,
+
+    "duplicate_signatures": …,
+
+    "urlss_count": …,
+
+    "domainss_count": …,
+
+    "signaturess_count": …
+
+  },
+
+  "overlap": { … },
+
+  "unique_to_hplt": { … },
+
+  "unique_to_fineweb": { … }
+
+}
+
+```
