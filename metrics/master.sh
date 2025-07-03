@@ -17,7 +17,7 @@ if [ "$#" -ne 1 ]; then
 fi
 
 LISTFILE=$1
-BASEDIR=/project/project_462000953/scratch/training/catalogue/hplt/2.0/cleaned/
+BASEDIR=/project/project_462000953/scratch/training/catalogue/fineweb/2.1.0/data
 
 # load relative paths
 mapfile -t RELFILES < "$LISTFILE"

@@ -23,10 +23,14 @@ def process_files(path):
 def find_missing(expected, result):
     missing = []
     for file in expected:
-        sub_filepath = os.path.join(os.path.basename(os.path.dirname(file)), os.path.basename(file))
-        if sub_filepath in result:
-            continue
+        parent = os.path.basename(os.path.dirname(file))
+        name = os.path.basename(file)
+        if parent in ("train", "test"):
+            grandparent = os.path.basename(os.path.dirname(os.path.dirname(file)))
+            sub_filepath = os.path.join(grandparent, parent, name)
         else:
+            sub_filepath = os.path.join(parent, name)
+        if sub_filepath not in result:
             missing.append(sub_filepath)
     return missing
 
