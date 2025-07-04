@@ -9,15 +9,15 @@
 #SBATCH --partition=small
 
 # Check if at least one .zst file is provided
-#if [ "$#" -lt 1 ]; then
-#    echo "Usage: $0 file1.zst [file2.zst ...]"
-#    exit 1
-#fi
-#
-#if [ "$#" -gt 40 ]; then
-#    echo "Error: Maximum of 40 files allowed. You provided $#."
-#    exit 1
-#fi
+if [ "$#" -lt 1 ]; then
+    echo "Usage: $0 file1.zst [file2.zst ...]"
+    exit 1
+fi
+
+if [ "$#" -gt 40 ]; then
+    echo "Error: Maximum of 40 files allowed. You provided $#."
+    exit 1
+fi
 
 # Calculate CPU and memory requirements (limited by hardware)
 CPUS="$#"

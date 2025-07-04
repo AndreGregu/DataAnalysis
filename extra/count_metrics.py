@@ -30,7 +30,9 @@ def create_summary(path):
             "tokens": tokens,
             "errors": errors
         }
-        total_languages += 1
+        if os.path.basename(root) not in ("train", "test"):
+            print(root)
+            total_languages += 1
         total_file_count += file_count
         total_size += size
         total_documents += documents

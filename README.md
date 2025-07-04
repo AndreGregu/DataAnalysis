@@ -6,6 +6,13 @@
 
 This project provides tools for processing `.zst`-compressed text files using Hugging Face tokenizers and GNU Parallel.
 
+The project is divided in two parts: 
+
+* Counting the metrics of compressed files
+
+* COunting unique metrics of groups of compressed files 
+
+
 
 
 ---
@@ -22,7 +29,7 @@ This project provides tools for processing `.zst`-compressed text files using Hu
 
 * `extra/find_missing.py` — Finds the missing files between a list of files and the `results`-folder, and create>
 
-* `extra/count_metrics.py` — Calculates the total metrics per language..
+* `extra/count_metrics.py` — Calculates the total metrics per language.
 
 * `metrics/script.py` — Processes a single `.zst` file: decompresses, tokenizes, and collects text statistics.
 
@@ -38,7 +45,7 @@ This project provides tools for processing `.zst`-compressed text files using Hu
 
 * `duplicates/run_execute.sh` — SLURM script to allocate resources and run pertaining `execute.py` efficiently on HPC systems.
 
-* `duplicates/compare.py` — Compares the different result files in a language, and creates a summary file called `result.json`, which are compared to each other to create a `summary.json` file.
+* `duplicates/compare.py` — Compares the different result files in a language, and creates a summary file called `result.json`, which are compared to each other to create a `comparison.json` file.
 
 
 
@@ -264,9 +271,6 @@ project_root/
 
 
 
-### Code for counting metrics
-
-
 Make the SLURM-script executable:
 
 
@@ -276,6 +280,10 @@ Make the SLURM-script executable:
 chmod +x <path>/<file_name>
 
 ```
+
+
+
+### Code for counting metrics
 
 
 
@@ -291,33 +299,21 @@ sbatch metrics/master.sh /project/project_462000953/oe/hplt.files
 
 
 
-Counting the metrics for multiple files on several cores on one node is done using:
+If you provide less than 20 files, only one job will be started as the code submitts jobs in batches of 20.
+
+
+
+As shown above, the code takes a list of files as one argument, and will not work on several arguments. 
+
+
+
+>**Note:** It is important that the following values are cutomized in metrics/master.sh based on where the actual files are stored.:
 
 
 
 ```bash
 
-sbatch metrics/run_execute.sh /project/project_462000953/oe/hplt.files
-
-```
-
-
-
->**Note:** It is important that the following values are cutomized in metrics/run_execute.py:
-
-
-
-```bash
-
-#SBATCH --account=<your_project>
-
-#SBATCH --time=<expected_time>
-
-#SBATCH --cpus-per-task=<number_of_files_per_node>
-
-#SBATCH --mem=<total_memory_per_node>
-
-#SBATCH --partition=<type_of_node>
+BASEDIR=/project/project_462000953/scratch/training/catalogue/fineweb/2.1.0/data
 
 ```
 
@@ -335,11 +331,67 @@ Provide all files for a language in both HPLT and Fineweb to `duplicates/run_exe
 
 sbatch run_execute.sh $(find /project/project_462000953/scratch/training/catalogue/fineweb/2.1.0/data/nob_Latn/train/ -name "*zst") $(find /project/project_462000953/scratch/training/catalogue/hplt/2.0/cleaned/nob_Latn/ -name "*.zst")
 
-``` 
+```
 
 
 
 It is also possible to only count for one dataset type (i.e HPLT) by only providing files in the HPLT folder. 
+
+
+
+### Extra codes
+
+
+
+`count_metrics.py` will count the metrics of all .json files and generate a `summary.json` of the groups of files (i.e. a summary for a fineweb `nob_LATN` train set, or a hplt `nob_Latn` set), and also generate a full summary for the hplt or fineweb groups called `total_summary.json`:
+
+
+
+```bash
+
+python count_metrics ../../results/fineweb/
+
+```
+
+
+
+>**Note:** In order for the code to correctly place the summaries, it is important that the path in `count_metrics.py` lead to a subgroup of the result folder (i.e. `hplt` or `fineweb`) 
+
+
+
+`tree.py` will print the whole tree structure of a folder:
+
+
+
+```bash
+
+python tree.py ../../results
+
+```
+
+
+
+`find_missing.py` will take a list of files (i.e. .txt or .files) and a create a file list with the missing elements. Usefull if some jobs got cancelled and files were missing in the results folder: 
+
+
+
+```bash
+
+python find_missing expected_files.txt ../../results
+
+```
+ 
+
+
+`model.py` will load the HuggingFace Model into a local folder. It is required that the model is pre-downloaded before starting parallelization on several nodes, as it requires authentication to operate.
+
+
+
+```bash 
+
+python model.py
+
+```
 
 
 
@@ -398,7 +450,6 @@ Each `<file_name>.json` includes:
 
 
 Using the file `count_metrics.py` with the folder containing the results as argument will generate: 
-
 
 
 

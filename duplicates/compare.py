@@ -8,7 +8,7 @@ CATALOGS = ("hplt", "fineweb")
 SECTIONS = {
     "urls": ("url", Counter),
     "domains": ("domain", Counter),
-    "signatures": ("signatures", Counter),
+    "signatures": ("signature", Counter),
 }
 
 def main(base_dir="duplicate_results", comparison_file="comparison.json"):
