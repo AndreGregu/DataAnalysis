@@ -10,7 +10,7 @@ The project is divided in two parts:
 
 * Counting the metrics of compressed files
 
-* COunting unique metrics of groups of compressed files 
+* Counting unique metrics of groups of compressed files 
 
 
 
