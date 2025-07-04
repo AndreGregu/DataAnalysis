@@ -8,7 +8,7 @@ CATALOGS = ("hplt", "fineweb")
 SECTIONS = {
     "urls": ("url", Counter),
     "domains": ("domain", Counter),
-    "signatures": ("signature_docs", Counter),
+    "signatures": ("signatures", Counter),
 }
 
 def main(base_dir="duplicate_results", comparison_file="comparison.json"):
@@ -100,3 +100,6 @@ def compare_and_write(summary: dict, out_path: Path):
     result["unique_to_fineweb"] = uniques["fineweb"]
     out_path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(f"[INFO] Wrote comparison summary to {out_path}")
+
+if __name__ == "__main__":
+    main()

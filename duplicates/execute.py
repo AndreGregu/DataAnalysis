@@ -8,6 +8,7 @@ from collections import Counter
 from pathlib import Path
 
 def main():
+    """
     parser = argparse.ArgumentParser(description="Use GNU Parallel to run script.py on multiple .zst files.")
     parser.add_argument("data_files", nargs="+", help="Paths to .zst data files")
     args = parser.parse_args()
@@ -39,6 +40,7 @@ def main():
         check=True
     )
     print("[INFO] All processes completed.")
+    """
     print("[INFO] Running comparison step...")
     subprocess.run(
         ["python", "compare.py"],

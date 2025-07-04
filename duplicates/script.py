@@ -65,7 +65,7 @@ def main():
         for dom, count in domains.most_common()
     ]
     sorted_signatures = [
-        {"signatures": sig, "count": count}
+        {"signature": sig, "count": count}
         for sig, count in signatures.most_common()
     ]
     result = { 
